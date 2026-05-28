@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Banco Promerica – Nueva Contraseña</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #005A2B;
+      --green-mid:    #007A3D;
+      --red:          #DC2626;
+      --text-primary: #111827;
+      --text-body:    #374151;
+      --text-muted:   #6B7280;
+      --border:       #D1D5DB;
+      --border-focus: #007A3D;
+      --font:         'Segoe UI', system-ui, sans-serif;
+    }
+
+    html, body { height: 100%; font-family: var(--font); background: #fff; }
+
+    .screen {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      max-width: 430px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 36px 24px 48px;
+      gap: 28px;
+    }
+
+    /* ── Header ── */
+    .header h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+
+    .header p {
+      font-size: 15px;
+      color: var(--text-body);
+      line-height: 1.65;
+    }
+
+    /* ── Fields ── */
+    .fields { display: flex; flex-direction: column; gap: 24px; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+
+    .field label {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .input-wrap { position: relative; display: flex; align-items: center; }
+
+    .input-wrap input {
+      width: 100%;
+      height: 54px;
+      padding: 0 50px 0 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 16px;
+      color: var(--text-primary);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrap input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(0,122,61,0.12);
+    }
+
+    .input-wrap input.is-error { border-color: var(--red); }
+    .input-wrap input.is-valid { border-color: var(--green-mid); }
+
+    .toggle-vis {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: var(--green-mid);
+      display: flex;
+      align-items: center;
+    }
+
+    .toggle-vis svg { width: 22px; height: 22px; }
+
+    /* ── Strength bar ── */
+    .strength-wrap {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .strength-wrap.visible { display: flex; }
+
+    .strength-bars { display: flex; gap: 5px; }
+
+    .strength-bar {
+      flex: 1;
+      height: 4px;
+      border-radius: 4px;
+      background: #E5E7EB;
+      transition: background 0.3s;
+    }
+
+    .strength-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    /* ── Validation box ── */
+    .validation-box {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .validation-box.visible { display: flex; }
+
+    .rule {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--text-body);
+    }
+
+    .rule-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      margin-top: 1px;
+      color: var(--red);
+    }
+
+    /* ── Confirm error ── */
+    .confirm-error {
+      font-size: 13px;
+      color: var(--red);
+      padding-left: 2px;
+      display: none;
+    }
+
+    .confirm-error.visible { display: block; }
+
+    /* ── CTA ── */
+    .btn-submit {
+      width: 100%;
+      height: 56px;
+      background: var(--green-dark);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 4px;
+    }
+
+    .btn-submit:hover  { background: var(--green-mid); }
+    .btn-submit:active { transform: scale(0.98); }
+    .btn-submit:disabled {
+      background: #D1D5DB;
+      color: #9CA3AF;
+      cursor: not-allowed;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="screen">
+
+  <div class="header">
+    <h1>Crea tu nueva contraseña</h1>
+    <p>
+      Elige entre 8 y 16 caracteres. Incluye letras mayúsculas y minúsculas,
+      al menos un número y un símbolo. Evita espacios, tu nombre, "Banco",
+      "Promerica" o repetir el mismo carácter tres veces.
+    </p>
+  </div>
+
+  <div class="fields">
+
+    <!-- Contraseña -->
+    <div class="field">
+      <label for="pwd">Contraseña</label>
+      <div class="input-wrap">
+        <input type="password" id="pwd" name="password"
+               autocomplete="new-password" maxlength="16" />
+        <button type="button" class="toggle-vis" data-target="pwd" aria-label="Mostrar contraseña">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Strength: aparece desde el 3er carácter -->
+      <div class="strength-wrap" id="strength-wrap">
+        <div class="strength-bars">
+          <div class="strength-bar" id="bar-1"></div>
+          <div class="strength-bar" id="bar-2"></div>
+          <div class="strength-bar" id="bar-3"></div>
+          <div class="strength-bar" id="bar-4"></div>
+        </div>
+        <span class="strength-label" id="strength-label"></span>
+      </div>
+
+      <!-- Reglas: solo muestra las que NO se cumplen -->
+      <div class="validation-box" id="validation-box">
+        <div class="rule" id="rule-length">
+          <svg class="rule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Entre 8 y 16 caracteres</span>
+        </div>
+        <div class="rule" id="rule-upper">
+          <svg class="rule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Al menos una letra mayúscula</span>
+        </div>
+        <div class="rule" id="rule-lower">
+          <svg class="rule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Al menos una letra minúscula</span>
+        </div>
+        <div class="rule" id="rule-number">
+          <svg class="rule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Al menos un número</span>
+        </div>
+        <div class="rule" id="rule-repeat">
+          <svg class="rule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Evita repeticiones consecutivas de 3 letras o números</span>
+        </div>
+        <div class="rule" id="rule-blacklist">
+          <svg class="rule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Evita usar las palabras Banco y Promerica</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmar contraseña -->
+    <div class="field">
+      <label for="pwd-confirm">Confirmar Contraseña</label>
+      <div class="input-wrap">
+        <input type="password" id="pwd-confirm" name="password-confirm"
+               autocomplete="new-password" maxlength="16" />
+        <button type="button" class="toggle-vis" data-target="pwd-confirm" aria-label="Mostrar confirmación">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </button>
+      </div>
+      <span class="confirm-error" id="confirm-error">Las contraseñas no coinciden</span>
+    </div>
+
+  </div>
+
+  <button class="btn-submit" id="btn-submit" disabled>Guardar contraseña</button>
+
+</div>
+
+<script>
+  /* ── Reglas de validación ── */
+  const RULES = {
+    length:    v => v.length >= 8 && v.length <= 16,
+    upper:     v => /[A-Z]/.test(v),
+    lower:     v => /[a-z]/.test(v),
+    number:    v => /[0-9]/.test(v),
+    repeat:    v => !/(.)\1\1/.test(v),
+    blacklist: v => !/banco|promerica/i.test(v),
+  };
+
+  const STRENGTH_COLORS = ['#DC2626', '#D97706', '#EAB308', '#16A34A'];
+  const STRENGTH_LABELS = ['Muy débil', 'Débil', 'Moderada', 'Fuerte'];
+
+  function getScore(v) {
+    let s = 0;
+    if (v.length >= 8)  s++;
+    if (v.length >= 12) s++;
+    if (/[!@#$%^&*()_+\-=\[\]{}|;':",.<>\/?]/.test(v)) s++;
+    if (Object.values(RULES).every(fn => fn(v))) s++;
+    return Math.min(Math.max(s, 1), 4);
+  }
+
+  /* ── DOM refs ── */
+  const pwdInput     = document.getElementById('pwd');
+  const confirmInput = document.getElementById('pwd-confirm');
+  const validBox     = document.getElementById('validation-box');
+  const strengthWrap = document.getElementById('strength-wrap');
+  const strengthLbl  = document.getElementById('strength-label');
+  const bars         = [1,2,3,4].map(i => document.getElementById(`bar-${i}`));
+  const confirmError = document.getElementById('confirm-error');
+  const btnSubmit    = document.getElementById('btn-submit');
+
+  /* ── Password input ── */
+  pwdInput.addEventListener('input', () => {
+    const v = pwdInput.value;
+
+    /* Strength: visible desde el 3er carácter */
+    const showStrength = v.length >= 3;
+    strengthWrap.classList.toggle('visible', showStrength);
+    if (showStrength) {
+      const s = getScore(v);
+      bars.forEach((bar, i) => {
+        bar.style.background = i < s ? STRENGTH_COLORS[s - 1] : '#E5E7EB';
+      });
+      strengthLbl.textContent = STRENGTH_LABELS[s - 1];
+      strengthLbl.style.color = STRENGTH_COLORS[s - 1];
+    }
+
+    /* Reglas: mostrar solo las que NO se cumplen, ocultar las que sí */
+    if (v.length >= 3) {
+      let anyFailing = false;
+      Object.entries(RULES).forEach(([key, fn]) => {
+        const el     = document.getElementById(`rule-${key}`);
+        const passes = fn(v);
+        el.style.display = passes ? 'none' : 'flex';
+        if (!passes) anyFailing = true;
+      });
+      validBox.classList.toggle('visible', anyFailing);
+    } else {
+      /* Menos de 3 chars: ocultar todo el bloque */
+      validBox.classList.remove('visible');
+      Object.keys(RULES).forEach(key => {
+        document.getElementById(`rule-${key}`).style.display = 'flex';
+      });
+    }
+
+    /* Border */
+    const allPassed = v.length > 0 && Object.values(RULES).every(fn => fn(v));
+    pwdInput.classList.toggle('is-valid', allPassed);
+    pwdInput.classList.toggle('is-error', v.length >= 3 && !allPassed);
+
+    /* Re-evaluar confirmación si ya tiene valor */
+    if (confirmInput.value.length > 0) evaluateConfirm();
+    checkSubmit();
+  });
+
+  /* ── Confirm: evalúa al perder el foco (blur) ── */
+  confirmInput.addEventListener('blur', evaluateConfirm);
+
+  /* ── Limpiar error si vuelve a editar después de blur ── */
+  confirmInput.addEventListener('input', () => {
+    /* Solo limpiar el error mientras escribe; no volver a mostrarlo hasta blur */
+    if (confirmError.classList.contains('visible')) {
+      const match = confirmInput.value === pwdInput.value;
+      if (match) {
+        confirmError.classList.remove('visible');
+        confirmInput.classList.remove('is-error');
+        confirmInput.classList.add('is-valid');
+      }
+    }
+    checkSubmit();
+  });
+
+  function evaluateConfirm() {
+    const v     = confirmInput.value;
+    const match = v === pwdInput.value;
+    const show  = v.length > 0 && !match;
+    confirmError.classList.toggle('visible', show);
+    confirmInput.classList.toggle('is-error',  show);
+    confirmInput.classList.toggle('is-valid', v.length > 0 && match);
+    checkSubmit();
+  }
+
+  function checkSubmit() {
+    const pwdOk     = Object.values(RULES).every(fn => fn(pwdInput.value));
+    const confirmOk = confirmInput.value === pwdInput.value && confirmInput.value.length > 0;
+    btnSubmit.disabled = !(pwdOk && confirmOk);
+  }
+
+  /* ── Toggle visibilidad ── */
+  document.querySelectorAll('.toggle-vis').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.target);
+      const show  = input.type === 'password';
+      input.type  = show ? 'text' : 'password';
+      btn.querySelector('svg').innerHTML = show
+        ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+           <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+           <line x1="1" y1="1" x2="23" y2="23"/>`
+        : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+           <circle cx="12" cy="12" r="3"/>`;
+    });
+  });
+
+  /* ── Submit ── */
+  btnSubmit.addEventListener('click', () => {
+    window.location.href = 'exito-promerica.html';
+  });
+</script>
+
+</body>
+</html>
