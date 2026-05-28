@@ -15,43 +15,31 @@
       --font:         'Segoe UI', system-ui, sans-serif;
     }
 
-    html, body { height: 100%; font-family: var(--font); background: #fff; }
+    html, body { height: 100%; overflow: hidden; font-family: var(--font); background: #fff; }
 
     .screen {
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      height: 100vh;
       max-width: 430px;
       margin: 0 auto;
       background: #fff;
-      padding: 0 24px 40px;
+      padding: 0 24px 36px;
     }
 
-    /* ── Content: centrado verticalmente en el espacio disponible ── */
     .content {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      gap: 20px;
-      padding-top: 48px;
+      gap: 16px;
     }
 
-    /* ── Check icon ── */
-    .check-wrap {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-bottom: 8px;
-    }
+    .check-wrap { width: 100%; display: flex; justify-content: center; margin-bottom: 8px; }
 
-    .check-circle {
-      width: 96px;
-      height: 96px;
-    }
+    .check-circle { width: 88px; height: 88px; }
 
-    /* Animación del círculo y el check */
     .check-circle .circle-path {
       stroke-dasharray: 283;
       stroke-dashoffset: 283;
@@ -64,17 +52,11 @@
       animation: draw-check 0.35s ease forwards 0.55s;
     }
 
-    @keyframes draw-circle {
-      to { stroke-dashoffset: 0; }
-    }
+    @keyframes draw-circle { to { stroke-dashoffset: 0; } }
+    @keyframes draw-check  { to { stroke-dashoffset: 0; } }
 
-    @keyframes draw-check {
-      to { stroke-dashoffset: 0; }
-    }
-
-    /* ── Texto ── */
     .title {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 800;
       color: var(--text-primary);
       line-height: 1.2;
@@ -82,92 +64,56 @@
       width: 100%;
     }
 
-    .body-text {
-      font-size: 16px;
-      color: var(--text-body);
-      line-height: 1.7;
-      text-align: left;
-    }
-
-    .device-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    /* ── Footer ── */
-    .footer {
-      flex-shrink: 0;
-      padding-top: 24px;
-    }
+    .body-text { font-size: 15px; color: var(--text-body); line-height: 1.7; }
+    .device-name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
 
     .btn-enter {
       width: 100%;
-      height: 56px;
+      height: 54px;
       background: var(--green-dark);
       color: #fff;
       border: none;
       border-radius: 10px;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
+      flex-shrink: 0;
+      transition: background 0.2s;
     }
 
-    .btn-enter:hover  { background: var(--green-mid); }
+    .btn-enter:hover { background: var(--green-mid); }
     .btn-enter:active { transform: scale(0.98); }
   </style>
 </head>
 <body>
-
 <div class="screen">
 
   <div class="content">
-
-    <!-- Ícono de éxito animado -->
     <div class="check-wrap">
-      <svg class="check-circle" viewBox="0 0 96 96" fill="none"
-           xmlns="http://www.w3.org/2000/svg">
+      <svg class="check-circle" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle class="circle-path" cx="48" cy="48" r="45"
-                stroke="#005A2B" stroke-width="4"
-                stroke-linecap="round" fill="none"
-                transform="rotate(-90 48 48)"/>
-        <polyline class="check-path"
-                  points="28,50 42,64 68,36"
+                stroke="#005A2B" stroke-width="4" stroke-linecap="round"
+                fill="none" transform="rotate(-90 48 48)"/>
+        <polyline class="check-path" points="28,50 42,64 68,36"
                   stroke="#005A2B" stroke-width="5"
-                  stroke-linecap="round" stroke-linejoin="round"
-                  fill="none"/>
+                  stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       </svg>
     </div>
 
-    <!-- Título -->
     <h1 class="title">Tu Súper App está lista para ti</h1>
 
-    <!-- Cuerpo -->
-    <p class="body-text">
-      Al hacer gestiones desde tu computadora en Promerica en Línea,
-      ten a mano tu dispositivo único autorizador:
-    </p>
+    <p class="body-text">Al hacer gestiones desde tu computadora en Promerica en Línea, ten a mano tu dispositivo único autorizador:</p>
 
-    <!-- Nombre del dispositivo — reemplazar dinámicamente desde el backend -->
     <p class="device-name" id="device-name">iPhone 15 Pro</p>
-
   </div>
 
-  <!-- CTA -->
-  <div class="footer">
-    <button class="btn-enter" id="btn-enter">
-      Ingresar a Súper App
-    </button>
-  </div>
+  <button class="btn-enter" id="btn-enter">Ingresar a Súper App</button>
 
 </div>
-
 <script>
   document.getElementById('btn-enter').addEventListener('click', () => {
     console.log('Flujo completo');
   });
 </script>
-
 </body>
 </html>

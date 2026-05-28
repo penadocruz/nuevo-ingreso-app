@@ -10,38 +10,35 @@
     :root {
       --green-dark:  #005A2B;
       --green-mid:   #007A3D;
-      --green-light: #2E9E55;
+      --link-blue:   #1A56A0;
       --text-primary:#1A1A1A;
       --text-muted:  #4B5563;
       --border:      #D1D5DB;
-      --radius-card: 24px;
-      --radius-input:14px;
       --font:        'Segoe UI', system-ui, sans-serif;
     }
 
-    html, body { height: 100%; font-family: var(--font); background: #F3F4F6; }
+    html, body { height: 100%; overflow: hidden; font-family: var(--font); background: #fff; }
 
-    /* ── Layout ── */
     .screen {
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      height: 100vh;
       max-width: 430px;
       margin: 0 auto;
       background: #fff;
+      overflow: hidden;
     }
 
-    /* ── Hero ── */
     .hero {
       background: var(--green-dark);
-      padding: 36px 24px 48px;
+      padding: 28px 20px 44px;
       display: grid;
       grid-template-columns: 88px 1fr;
       grid-template-rows: auto auto;
       column-gap: 16px;
+      flex-shrink: 0;
     }
 
-    /* Icon badge */
     .icon-badge {
       grid-row: 1 / 3;
       align-self: start;
@@ -52,8 +49,8 @@
     }
 
     .icon-circle {
-      width: 80px;
-      height: 80px;
+      width: 72px;
+      height: 72px;
       background: rgba(255,255,255,0.95);
       border-radius: 50%;
       display: flex;
@@ -61,65 +58,35 @@
       justify-content: center;
     }
 
-    .icon-circle svg { width: 44px; height: 44px; }
+    .icon-circle svg { width: 40px; height: 40px; }
+    .badge-label { color: #fff; font-size: 14px; font-weight: 700; }
 
-    .badge-label {
-      color: #fff;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-    }
+    .hero-title { color: #fff; font-size: 18px; font-weight: 700; line-height: 1.3; }
+    .hero-body  { color: rgba(255,255,255,0.88); font-size: 13px; line-height: 1.6; margin-top: 8px; }
 
-    /* Hero text */
-    .hero-title {
-      color: #fff;
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 1.3;
-      align-self: start;
-    }
-
-    .hero-body {
-      color: rgba(255,255,255,0.88);
-      font-size: 14px;
-      line-height: 1.6;
-      margin-top: 10px;
-    }
-
-    /* ── Content area ── */
     .content {
       background: #fff;
-      border-radius: var(--radius-card) var(--radius-card) 0 0;
+      border-radius: 24px 24px 0 0;
       margin-top: -20px;
       flex: 1;
-      padding: 32px 24px 48px;
+      padding: 28px 24px 32px;
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
+      overflow: hidden;
     }
 
-    /* ── Instruction ── */
-    .instruction {
-      font-size: 15px;
-      color: var(--text-primary);
-      line-height: 1.5;
-    }
-
+    .instruction { font-size: 15px; color: var(--text-primary); line-height: 1.5; }
     .instruction strong { font-weight: 700; }
 
-    /* ── OTP inputs ── */
-    .otp-row {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
+    .otp-row { display: flex; justify-content: center; gap: 10px; }
 
     .otp-cell {
-      width: 52px;
-      height: 64px;
+      width: 50px;
+      height: 60px;
       border: 1.8px solid var(--border);
-      border-radius: var(--radius-input);
-      font-size: 24px;
+      border-radius: 12px;
+      font-size: 22px;
       font-weight: 700;
       text-align: center;
       color: var(--text-primary);
@@ -127,114 +94,50 @@
       background: #fff;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
-      /* Remove number spinners */
       -moz-appearance: textfield;
     }
 
     .otp-cell::-webkit-outer-spin-button,
     .otp-cell::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .otp-cell:focus { border-color: var(--green-mid); box-shadow: 0 0 0 3px rgba(0,122,61,0.14); }
+    .otp-cell.filled { border-color: var(--green-mid); }
 
-    .otp-cell:focus {
-      border-color: var(--green-mid);
-      box-shadow: 0 0 0 3px rgba(0,122,61,0.14);
-    }
-
-    .otp-cell.filled {
-      border-color: var(--green-mid);
-    }
-
-    .otp-cell.error {
-      border-color: #DC2626;
-      box-shadow: 0 0 0 3px rgba(220,38,38,0.12);
-    }
-
-    /* ── Timer ── */
-    .timer {
-      text-align: center;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    .timer span { font-variant-numeric: tabular-nums; }
-
+    .timer { text-align: center; font-size: 15px; font-weight: 700; color: var(--text-primary); }
     .timer.expired { color: #DC2626; }
 
-    /* ── Resend link (aparece al expirar) ── */
-    .resend {
-      display: none;
-      text-align: center;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .resend a {
-      color: #1A56A0;
-      font-weight: 600;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
+    .resend { display: none; text-align: center; font-size: 14px; color: var(--text-muted); }
+    .resend a { color: var(--link-blue); font-weight: 600; text-decoration: underline; cursor: pointer; }
     .resend.visible { display: block; }
 
-    /* ── Error message ── */
-    .error-msg {
-      display: none;
-      text-align: center;
-      font-size: 13px;
-      color: #DC2626;
-    }
-
+    .error-msg { display: none; text-align: center; font-size: 13px; color: #DC2626; }
     .error-msg.visible { display: block; }
-
   </style>
 </head>
 <body>
-
 <div class="screen">
 
-  <!-- Hero -->
   <div class="hero">
-
     <div class="icon-badge">
       <div class="icon-circle">
-        <!--
-          ÍCONO: reemplaza con tu asset real, ej:
-          <img src="ruta/icono-autoriza.svg" width="44" height="44" alt="" />
-        -->
         <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Escudo -->
           <path d="M22 4L6 10v12c0 9.4 6.8 18.2 16 20 9.2-1.8 16-10.6 16-20V10L22 4z"
                 fill="#007A3D" stroke="#005A2B" stroke-width="1.5"/>
-          <!-- Candado simplificado -->
           <rect x="15" y="20" width="14" height="10" rx="2" fill="white" opacity="0.9"/>
-          <path d="M17 20v-3a5 5 0 0 1 10 0v3" stroke="white" stroke-width="2"
-                fill="none" stroke-linecap="round"/>
+          <path d="M17 20v-3a5 5 0 0 1 10 0v3" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
           <circle cx="22" cy="25" r="1.5" fill="#005A2B"/>
-          <!-- Punto rojo de notificación -->
           <circle cx="32" cy="10" r="4" fill="#DC2626"/>
           <circle cx="32" cy="10" r="2" fill="white"/>
         </svg>
       </div>
       <span class="badge-label">Autoriza</span>
     </div>
-
     <h1 class="hero-title">Validaremos identidad, dispositivo y seguridad.</h1>
-    <p class="hero-body">
-      Para protegerte, confirmaremos quién eres y vincularemos este celular como
-      tu dispositivo seguro mediante un código SMS.
-    </p>
-
+    <p class="hero-body">Para protegerte, confirmaremos quién eres y vincularemos este celular como tu dispositivo seguro mediante un código SMS.</p>
   </div>
 
-  <!-- Content -->
   <div class="content">
+    <p class="instruction">Ingresa el código enviado a tu teléfono celular <strong>X245</strong></p>
 
-    <p class="instruction">
-      Ingresa el código enviado a tu teléfono celular <strong>X245</strong>
-    </p>
-
-    <!-- OTP -->
     <div class="otp-row" id="otp-row">
       <input class="otp-cell" type="number" inputmode="numeric" maxlength="1" aria-label="Dígito 1" />
       <input class="otp-cell" type="number" inputmode="numeric" maxlength="1" aria-label="Dígito 2" />
@@ -244,37 +147,21 @@
       <input class="otp-cell" type="number" inputmode="numeric" maxlength="1" aria-label="Dígito 6" />
     </div>
 
-    <!-- Timer -->
-    <p class="timer" id="timer">
-      Tu código expira en: <span id="countdown">00:32</span>
-    </p>
-
-    <!-- Reenviar (aparece al expirar) -->
-    <p class="resend" id="resend">
-      ¿No recibiste el código? <a id="resend-btn">Reenviar</a>
-    </p>
-
-    <!-- Error -->
+    <p class="timer" id="timer">Tu código expira en: <span id="countdown">00:32</span></p>
+    <p class="resend" id="resend">¿No recibiste el código? <a id="resend-btn">Reenviar</a></p>
     <p class="error-msg" id="error-msg">Código incorrecto. Intenta de nuevo.</p>
-
-
   </div>
 
 </div>
-
 <script>
-  /* ── OTP logic ── */
   const cells    = Array.from(document.querySelectorAll('.otp-cell'));
-  const errorMsg  = document.getElementById('error-msg');
+  const errorMsg = document.getElementById('error-msg');
 
   cells.forEach((cell, i) => {
     cell.addEventListener('input', e => {
-      // Allow only single digit
       const val = e.target.value.replace(/\D/g, '').slice(-1);
       cell.value = val;
       cell.classList.toggle('filled', !!val);
-      errorMsg.classList.remove('visible');
-
       if (val && i < cells.length - 1) cells[i + 1].focus();
       checkComplete();
     });
@@ -284,20 +171,14 @@
         cells[i - 1].value = '';
         cells[i - 1].classList.remove('filled');
         cells[i - 1].focus();
-        checkComplete();
       }
     });
 
-    // Handle paste on first cell
     cell.addEventListener('paste', e => {
       e.preventDefault();
-      const pasted = (e.clipboardData || window.clipboardData)
-        .getData('text').replace(/\D/g, '').slice(0, 6);
+      const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
       pasted.split('').forEach((d, idx) => {
-        if (cells[idx]) {
-          cells[idx].value = d;
-          cells[idx].classList.add('filled');
-        }
+        if (cells[idx]) { cells[idx].value = d; cells[idx].classList.add('filled'); }
       });
       const nextEmpty = cells.findIndex(c => !c.value);
       (cells[nextEmpty] || cells[cells.length - 1]).focus();
@@ -306,67 +187,50 @@
   });
 
   function checkComplete() {
-    const complete = cells.every(c => c.value !== '');
-    if (complete) {
-      // Pequeña pausa para que el usuario vea el último dígito antes de navegar
-      setTimeout(() => {
-        window.location.href = 'terms-promerica.html';
-      }, 400);
+    if (cells.every(c => c.value !== '')) {
+      setTimeout(() => { window.location.href = 'terms-promerica.html'; }, 400);
     }
   }
 
-  /* ── Countdown timer ── */
-  const INITIAL_SECONDS = 32;
-  let secondsLeft = INITIAL_SECONDS;
+  /* Countdown */
+  const INITIAL = 32;
+  let secondsLeft = INITIAL;
   const countdownEl = document.getElementById('countdown');
   const timerEl     = document.getElementById('timer');
   const resendEl    = document.getElementById('resend');
 
   function formatTime(s) {
-    const mm = String(Math.floor(s / 60)).padStart(2, '0');
-    const ss = String(s % 60).padStart(2, '0');
-    return `${mm}:${ss}`;
+    return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
   }
 
-  const interval = setInterval(() => {
-    secondsLeft--;
-    countdownEl.textContent = formatTime(secondsLeft);
-
-    if (secondsLeft <= 0) {
-      clearInterval(interval);
-      timerEl.classList.add('expired');
-      timerEl.textContent = 'Tu código ha expirado.';
-      resendEl.classList.add('visible');
-    }
-  }, 1000);
-
-  /* ── Resend ── */
-  document.getElementById('resend-btn').addEventListener('click', () => {
-    // TODO: llamar endpoint de reenvío de OTP
-    secondsLeft = INITIAL_SECONDS;
-    timerEl.classList.remove('expired');
-    timerEl.innerHTML = 'Tu código expira en: <span id="countdown">00:32</span>';
-    resendEl.classList.remove('visible');
-    cells.forEach(c => { c.value = ''; c.classList.remove('filled', 'error'); });
-    checkComplete();
-    cells[0].focus();
-
-    // Re-run timer
-    const newInterval = setInterval(() => {
+  function startTimer() {
+    return setInterval(() => {
       secondsLeft--;
-      document.getElementById('countdown').textContent = formatTime(secondsLeft);
+      const el = document.getElementById('countdown');
+      if (el) el.textContent = formatTime(secondsLeft);
       if (secondsLeft <= 0) {
-        clearInterval(newInterval);
-        document.getElementById('timer').classList.add('expired');
-        document.getElementById('timer').textContent = 'Tu código ha expirado.';
+        clearInterval(timer);
+        timerEl.classList.add('expired');
+        timerEl.textContent = 'Tu código ha expirado.';
         resendEl.classList.add('visible');
       }
     }, 1000);
+  }
+
+  let timer = startTimer();
+
+  document.getElementById('resend-btn').addEventListener('click', () => {
+    clearInterval(timer);
+    secondsLeft = INITIAL;
+    timerEl.classList.remove('expired');
+    timerEl.innerHTML = 'Tu código expira en: <span id="countdown">00:32</span>';
+    resendEl.classList.remove('visible');
+    cells.forEach(c => { c.value = ''; c.classList.remove('filled'); });
+    cells[0].focus();
+    timer = startTimer();
   });
 
-  // Focus first cell on load
   cells[0].focus();
 </script>
-
 </body>
 </html>
