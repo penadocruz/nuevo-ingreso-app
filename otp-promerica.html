@@ -317,7 +317,7 @@
     }, 1000);
   }
 
-  let timer = startTimer();
+  let timer = null;
 
   document.getElementById('resend-btn').addEventListener('click', () => {
     clearInterval(timer);
@@ -327,23 +327,56 @@
     resendEl.classList.remove('visible');
     cells.forEach(c => { c.value = ''; c.classList.remove('filled'); });
     cells[0].focus();
-    timer = startTimer();
+    timer = startTimerWithSms();
   });
 
   cells[0].focus();
 
   /* ── SMS Simulation ── */
   const smsNotif = document.getElementById('sms-notif');
+  let smsDismissTimeout = null;
 
   function dismissSms() {
     smsNotif.style.transform = 'translateX(-50%) translateY(-140%)';
+    clearTimeout(smsDismissTimeout);
   }
 
-  setTimeout(() => {
+  function showSms() {
+    clearTimeout(smsDismissTimeout);
+    smsNotif.style.transform = ''; // reset inline style para que tome la clase
     smsNotif.classList.add('show');
-    // Auto-dismiss after 12 seconds
-    setTimeout(dismissSms, 12000);
-  }, 2000);
+    smsDismissTimeout = setTimeout(dismissSms, 12000);
+  }
+
+  // Primera llegada a los 2 segundos
+  setTimeout(showSms, 2000);
+
+  // Reenvío cuando el timer expira (conectado al startTimer)
+  const originalStartTimer = startTimer;
+
+  // Patch: re-mostrar SMS cuando el código expira
+  function startTimerWithSms() {
+    return setInterval(() => {
+      secondsLeft--;
+      const el = document.getElementById('countdown');
+      if (el) el.textContent = formatTime(secondsLeft);
+      if (secondsLeft <= 0) {
+        clearInterval(timer);
+        timerEl.classList.add('expired');
+        timerEl.textContent = 'Tu código ha expirado.';
+        resendEl.classList.add('visible');
+        showSms(); // ← reenvía el SMS al expirar
+      }
+    }, 1000);
+  }
+
+  // Arrancar el timer con la versión que incluye SMS
+  timer = startTimerWithSms();
+
+  // También al tocar "Reenviar"
+  document.getElementById('resend-btn').addEventListener('click', () => {
+    setTimeout(showSms, 1500);
+  }, { capture: true });
 
   // Dismiss on tap
   smsNotif.addEventListener('click', dismissSms);
