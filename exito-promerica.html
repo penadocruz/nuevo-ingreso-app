@@ -111,9 +111,118 @@
 
     .btn-enter:hover { background: var(--green-mid); }
     .btn-enter:active { transform: scale(0.98); }
+
+    /* ── System Dialog ── */
+    .dialog-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      padding: 24px;
+    }
+
+    .dialog-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .dialog-box {
+      background: rgba(242, 242, 247, 0.98);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 320px;
+      overflow: hidden;
+      transform: scale(0.85);
+      transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .dialog-overlay.show .dialog-box {
+      transform: scale(1);
+    }
+
+    .dialog-body {
+      padding: 20px 20px 16px;
+      text-align: center;
+      border-bottom: 1px solid rgba(60, 60, 67, 0.18);
+    }
+
+    .dialog-icon {
+      width: 44px;
+      height: 44px;
+      background: #F0F7FF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+
+    .dialog-icon svg { width: 24px; height: 24px; color: #007AFF; }
+
+    .dialog-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1C1C1E;
+      margin-bottom: 6px;
+    }
+
+    .dialog-message {
+      font-size: 13px;
+      color: #3A3A3C;
+      line-height: 1.5;
+    }
+
+    .dialog-actions {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dialog-btn {
+      background: none;
+      border: none;
+      padding: 14px 20px;
+      font-size: 17px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(60, 60, 67, 0.18);
+      transition: background 0.15s;
+      color: #007AFF;
+      font-weight: 600;
+    }
+
+    .dialog-btn:last-child { border-bottom: none; }
+    .dialog-btn:active { background: rgba(0,0,0,0.06); }
+    .dialog-btn.secondary { font-weight: 400; color: #007AFF; }
   </style>
 </head>
 <body>
+<!-- System Dialog -->
+<div class="dialog-overlay" id="dialog-overlay">
+  <div class="dialog-box">
+    <div class="dialog-body">
+      <div class="dialog-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="10"/>
+        </svg>
+      </div>
+      <div class="dialog-title">Ya puedes cerrar esta pestaña</div>
+      <div class="dialog-message">Tu Súper App está activada. Continuá tu sesión directamente desde la aplicación en tu celular.</div>
+    </div>
+    <div class="dialog-actions">
+      <button class="dialog-btn" id="btn-close-tab">Cerrar pestaña</button>
+      <button class="dialog-btn secondary" id="btn-dismiss">Entendido</button>
+    </div>
+  </div>
+</div>
+
 <div class="screen">
 
   <div class="content">
@@ -139,8 +248,23 @@
 
 </div>
 <script>
+  const overlay = document.getElementById('dialog-overlay');
+
   document.getElementById('btn-enter').addEventListener('click', () => {
-    console.log('Flujo completo');
+    overlay.classList.add('show');
+  });
+
+  document.getElementById('btn-close-tab').addEventListener('click', () => {
+    window.close();
+    // Fallback: si el navegador no permite cerrar, mostrar instrucción
+    setTimeout(() => {
+      document.querySelector('.dialog-message').textContent = 'Para cerrar, usá el botón ✕ de tu navegador o deslizá la pestaña hacia arriba.';
+      document.getElementById('btn-close-tab').style.display = 'none';
+    }, 400);
+  });
+
+  document.getElementById('btn-dismiss').addEventListener('click', () => {
+    overlay.classList.remove('show');
   });
 </script>
 </body>
